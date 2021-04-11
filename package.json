@@ -17,7 +17,8 @@
   "nodemonConfig": {
     "ignore": [
       "**.test.js"
-    ]
+    ],
+    "delay": 2500
   },
   "keywords": [],
   "author": "Adam Scott",
@@ -27,9 +28,9 @@
     "bcrypt": "3.0.6",
     "cors": "2.8.5",
     "dotenv": "6.1.0",
-    "express": "4.16.4",
+    "express": "^4.16.4",
     "express-session": "1.15.6",
-    "graphql": "^14.1.1",
+    "graphql": "^14.7.0",
     "graphql-depth-limit": "1.1.0",
     "graphql-iso-date": "3.6.1",
     "graphql-validation-complexity": "0.2.4",
@@ -40,7 +41,9 @@
     "mongoose": "^5.12.3",
     "nodemon": "1.18.7",
     "passport": "0.4.0",
-    "passport-github2": "0.1.11"
+    "passport-github2": "0.1.11",
+    "stylelint": "^13.12.0",
+    "stylelint-config-standard": "^21.0.0"
   },
   "devDependencies": {
     "eslint": "^5.13.0",
