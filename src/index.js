@@ -1,40 +1,34 @@
 /*index.js
  * Main entry point of program*/
 /*eslint-disable no-undef*/
+
+
 const express = require('express');
 const { ApolloServer, gql } = require('apollo-server-express');
+require('dotenv').config();
+const db = require('./db');
+const models = require('./models');
 /*port used for program*/
 const port = process.env.PORT || 4000;
-
-let notes = [
-  {
-    id: '1',
-    content: 'This is a note',
-    author: 'Mike Jones'
-  },
-  {
-    id: '2',
-    content: 'Another note',
-    author: 'Last Mr. Bigg'
-  },
-  {
-    id: '3',
-    content: 'Third note in object',
-    author: 'Birdman'
-  }
-];
+const DB_HOST = process.env.DB_HOST;
 
 /*----------GraphQL----------*/
 /*Schemas for GraphQL*/
 const typeDefs = gql`
-  type Query {
-    hello: String
-    notes: [Note!]!
-  }
   type Note {
     id: ID!
     content: String!
     author: String!
+  }
+
+  type Query {
+    hello: String
+    notes: [Note!]!
+    note(id: ID!): Note!
+  }
+
+  type Mutation {
+    newNote(content: String!): Note!
   }
 `;
 
@@ -42,13 +36,28 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     hello: () => 'Hello World!',
-    notes: () => notes
+    notes: async () => {
+      return models.Note.find();
+    },
+    note: async (parent, args) => {
+      return models.Note.findById(args.id);
+    }
+  },
+  Mutation: {
+    newNote: async (parent, args) => {
+      return await models.Note.create({
+        content: args.content,
+        author: 'Who Mike Jones'
+      });
+    }
   }
 };
 
 /*----------Server----------*/
 /*store express in app variable*/
 const app = express();
+
+db.connect(DB_HOST);
 /*Apollo Server setup*/
 const server = new ApolloServer({ typeDefs, resolvers });
 /*apply the Apollo GraphQL middleware and set the path to /api*/
