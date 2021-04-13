@@ -47,7 +47,7 @@ const resolvers = {
     newNote: async (parent, args) => {
       return await models.Note.create({
         content: args.content,
-        author: 'Who Mike Jones'
+        author: 'Mike Jones'
       });
     }
   }
