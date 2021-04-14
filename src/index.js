@@ -1,6 +1,7 @@
 /*index.js
  * Main entry point of program*/
 
+
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 require('dotenv').config();
@@ -14,6 +15,7 @@ const resolvers = require('./resolvers');
 /*runs server on port specified in .env file or port 4000*/
 const port = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
+
 
 /*store express in app variable*/
 const app = express();
@@ -31,10 +33,10 @@ const server = new ApolloServer({
   }
 });
 
-/*apply the Apollo GraphQL middleware and set the path to /api...GraphQL sandbox*/
+/*apply the Apollo GraphQL middleware and set the path to /api*/
 server.applyMiddleware({ app, path: '/api' });
 
-/*port listener and console.log successful connection*/
+/*port listener*/
 app.listen({ port }, () =>
   console.log(
     `GraphQL server  on http://localhost:${port}${server.graphqlPath}`
