@@ -1,7 +1,5 @@
 /*index.js
  * Main entry point of program*/
-
-
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 require('dotenv').config();
