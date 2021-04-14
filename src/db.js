@@ -1,19 +1,20 @@
 
-// Require the mongoose library
+/*require Mongoose library*/
+
 const mongoose = require('mongoose');
 module.exports = {
   connect: DB_HOST => {
-// Use the Mongo driver's updated URL string parser
+// use the Mongo driver's updated URL string parser
     mongoose.set('useNewUrlParser', true);
-// Use findOneAndUpdate() in place of findAndModify()
+// use findOneAndUpdate() in place of findAndModify()
     mongoose.set('useFindAndModify', false);
-// Use createIndex() in place of ensureIndex()
+// use createIndex() in place of ensureIndex()
     mongoose.set('useCreateIndex', true);
-// Use the new server discovery and monitoring engine
+// use the new server discovery and monitoring engine
     mongoose.set('useUnifiedTopology', true);
-// Connect to the DB
+// connect to the DB
     mongoose.connect(DB_HOST);
-// Log an error if we fail to connect
+// log an error if connection fails
     mongoose.connection.on('error', err => {
       console.error(err);
       console.log(

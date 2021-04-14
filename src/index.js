@@ -1,67 +1,39 @@
 /*index.js
  * Main entry point of program*/
-/*eslint-disable no-undef*/
-
-
 const express = require('express');
-const { ApolloServer, gql } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 require('dotenv').config();
+
+/*local module imports*/
 const db = require('./db');
 const models = require('./models');
-/*port used for program*/
+const typeDefs = require('./schema.js');
+const resolvers = require('./resolvers');
+
+/*runs server on port specified in .env file or port 4000*/
 const port = process.env.PORT || 4000;
 const DB_HOST = process.env.DB_HOST;
 
-/*----------GraphQL----------*/
-/*Schemas for GraphQL*/
-const typeDefs = gql`
-  type Note {
-    id: ID!
-    content: String!
-    author: String!
-  }
 
-  type Query {
-    hello: String
-    notes: [Note!]!
-    note(id: ID!): Note!
-  }
-
-  type Mutation {
-    newNote(content: String!): Note!
-  }
-`;
-
-/*Resolvers for GraphQL*/
-const resolvers = {
-  Query: {
-    hello: () => 'Hello World!',
-    notes: async () => {
-      return models.Note.find();
-    },
-    note: async (parent, args) => {
-      return models.Note.findById(args.id);
-    }
-  },
-  Mutation: {
-    newNote: async (parent, args) => {
-      return await models.Note.create({
-        content: args.content,
-        author: 'Mike Jones rapper'
-      });
-    }
-  }
-};
-
-/*----------Server----------*/
 /*store express in app variable*/
 const app = express();
 
+/*connect to specified database*/
 db.connect(DB_HOST);
+
 /*Apollo Server setup*/
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  context: () => {
+    /*adds db models to the context*/
+    return { models };
+  }
+});
+
 /*apply the Apollo GraphQL middleware and set the path to /api*/
 server.applyMiddleware({ app, path: '/api' });
+
 /*port listener*/
 app.listen({ port }, () =>
   console.log(

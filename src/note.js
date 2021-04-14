@@ -1,5 +1,6 @@
+/*import Mongoose*/
 const mongoose = require('mongoose');
-/*new mongoose schema*/
+/*mongoose schema*/
 const noteSchema = new mongoose.Schema(
   {
     content: {
@@ -15,10 +16,7 @@ const noteSchema = new mongoose.Schema(
   }
   )
 ;
-
-/*defines Note model with schema*/
+/*store noteSchema in Note*/
 const Note = mongoose.model('Note', noteSchema);
-
-
 /*export Note*/
 module.exports = Note;
